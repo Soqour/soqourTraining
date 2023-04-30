@@ -73,14 +73,6 @@ export default function Home({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      {/* <View style={{ borderBottomWidth: 2, width: "50%", paddingBottom: 30 }}>
-        <Text style={styles.title}>مركز العديد لتدريب الصقور </Text>
-      </View>
-      <View style={{ width: "50%" }}>
-        <Pressable onPress={() => navigation.navigate("Login")}>
-          <Text style={{ textAlign: "right", marginTop: 20 }}>Log in</Text>
-        </Pressable>
-      </View> */}
       <ImageBackground
         style={{ width: "100%", height: "120%" }}
         source={{
@@ -88,6 +80,20 @@ export default function Home({ navigation }) {
           uri: "https://www.sobranews.com/wp-content/uploads/2020/12/DST_1464635_2184843_75_1_2020120823385462.jpg",
         }}
       >
+        <View>
+          <Pressable onPress={() => navigation.navigate("Login")}>
+            <Text
+              style={{
+                textAlign: "right",
+                marginTop: 50,
+                marginRight: 200,
+                color: "white",
+              }}
+            >
+              Log in
+            </Text>
+          </Pressable>
+        </View>
         <View style={{ width: "40%", marginTop: 200 }}>
           <Text style={styles.title}>مركز العديد لتدريب الصقور </Text>
         </View>

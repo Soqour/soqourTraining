@@ -1,7 +1,52 @@
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { db } from "./firebase";
+import {
+  doc,
+  query,
+  getDocs,
+  getDoc,
+  addDoc,
+  collection,
+  deleteDoc,
+  onSnapshot,
+} from "firebase/firestore";
+// import { onAuthStateChanged } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "./config"; // config is the js file I created
+before;
 
 export default function Login({ navigation }) {
+  const go = () => {
+    setFalconError(false);
+    navigation.navigate("AdminDashboard", { email: email, password: password });
+  };
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [signedIn, setSignedIn] = useState(false);
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        console.log("Logged in");
+        setSignedIn(true);
+        navigation.replace("Home");
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setSignedIn(false);
+      });
+  };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  });
   return (
     <View style={styles.container}>
       <View style={{ borderBottomWidth: 2, width: "50%", paddingBottom: 30 }}>

@@ -11,7 +11,7 @@ export default function UserHome({ route, navigation }) {
   const [user, setUser] = useState({});
   useEffect(() => {
     readUser();
-  }, [user]);
+  }, []);
   const readUser = async () => {
     const docRef = doc(db, "users", qId);
     const docSnap = await getDoc(docRef);
@@ -42,7 +42,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "15%", fontSize: 19 }}>الاسم</Text>
-            <TextInput value={user.name} style={styles.input} readOnly />
+            <TextInput value={user.name} style={styles.input} />
           </View>
           <View
             style={{
@@ -51,7 +51,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}>الرقم الشخصي</Text>
-            <TextInput value={user.qId} style={styles.input} readOnly />
+            <TextInput value={user.qId} style={styles.input} />
           </View>
         </View>
 
