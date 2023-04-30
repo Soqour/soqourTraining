@@ -1,7 +1,27 @@
 import { StatusBar } from "expo-status-bar";
+import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { DataTable } from "react-native-paper";
-export default function UserHome({ navigation }) {
+import { db } from "./firebase";
+export default function UserHome({ route, navigation }) {
+  const { qId, falconId } = route.params;
+  console.log(qId, "and ", falconId);
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    readUser();
+  }, []);
+  const readUser = async () => {
+    const docRef = doc(db, "users", qId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setUser(docSnap.data());
+    } else {
+      console.log("No such document!");
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={{ borderBottomWidth: 2, width: "50%", paddingBottom: 30 }}>
@@ -22,7 +42,7 @@ export default function UserHome({ navigation }) {
             }}
           >
             <Text style={{ width: "15%", fontSize: 19 }}>الاسم</Text>
-            <TextInput style={styles.input} />
+            <TextInput value={user.name} style={styles.input} />
           </View>
           <View
             style={{
@@ -31,7 +51,7 @@ export default function UserHome({ navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}>الرقم الشخصي</Text>
-            <TextInput style={styles.input} />
+            <TextInput value={user.qId} style={styles.input} />
           </View>
         </View>
 
@@ -49,7 +69,7 @@ export default function UserHome({ navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}>رقم الجوال</Text>
-            <TextInput style={styles.input} />
+            <TextInput value={user.phone} style={styles.input} />
           </View>
         </View>
 
