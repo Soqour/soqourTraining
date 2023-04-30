@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
 import {
   doc,
   query,
@@ -11,17 +11,17 @@ import {
   deleteDoc,
   onSnapshot,
 } from "firebase/firestore";
-// import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "./config"; // config is the js file I created
-before;
+import { useState } from "react";
 
 export default function Login({ navigation }) {
+  const [loggedIn, setLoggedIn] = useState(false);
   const go = () => {
-    setFalconError(false);
+    // setFalconError(false);
     navigation.navigate("AdminDashboard", { email: email, password: password });
   };
   const [email, setEmail] = useState();
