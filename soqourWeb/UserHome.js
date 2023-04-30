@@ -1,17 +1,33 @@
 import { StatusBar } from "expo-status-bar";
-import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
 export default function UserHome({ route, navigation }) {
-  const { qId, falconId } = route.params;
+  // const { qId, falconId } = route.params;
+  const qId = "29812345678";
+  const falconId = "600123";
   console.log(qId, "and ", falconId);
 
   const [user, setUser] = useState({});
+  const [falcon, setFalcon] = useState({});
+  const [treatments, setTreatments] = useState([]);
+  const [training, setTraining] = useState([]);
+
   useEffect(() => {
     readUser();
-  }, [user]);
+    readFalcon();
+    readTraining();
+    readTreatments();
+  }, []);
   const readUser = async () => {
     const docRef = doc(db, "users", qId);
     const docSnap = await getDoc(docRef);
@@ -21,6 +37,40 @@ export default function UserHome({ route, navigation }) {
     } else {
       console.log("No such document!");
     }
+  };
+
+  const readFalcon = async () => {
+    console.log("falconnnnnn");
+    const docRef = doc(db, "users", qId, "soqour", falconId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Falcon data:", docSnap.data());
+      setFalcon(docSnap.data());
+    } else {
+      console.log("No such document!");
+    }
+  };
+
+  //Training
+  const readTraining = async () => {
+    const q = query(
+      collection(db, "users", qId, "soqour", falconId, "training")
+    );
+    let temp = [];
+    const docs = await getDocs(q);
+    docs.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+  //Treatments
+  const readTreatments = async () => {
+    const q = query(
+      collection(db, "users", qId, "soqour", falconId, "treatments")
+    );
+    const docs = await getDocs(q);
+    docs.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
   };
   return (
     <View style={styles.container}>
@@ -84,7 +134,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}>تاريخ الدخول</Text>
-            <TextInput style={styles.input} />
+            <TextInput value={falcon.entryDate} style={styles.input} />
           </View>
           <View
             style={{
@@ -93,7 +143,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}>تاريخ الخروج </Text>
-            <TextInput style={styles.input} />
+            <TextInput value={falcon.exitDate} style={styles.input} />
           </View>
         </View>
 
@@ -121,13 +171,6 @@ export default function UserHome({ route, navigation }) {
                 التاريخ
               </DataTable.Cell>
             </DataTable.Header>
-
-            <DataTable.Row style={{ borderWidth: 1 }}>
-              <DataTable.Cell numeric>طيران سفلي</DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                2-2-2023
-              </DataTable.Cell>
-            </DataTable.Row>
 
             <DataTable.Row style={{ borderWidth: 1 }}>
               <DataTable.Cell numeric>طيران سفلي</DataTable.Cell>
@@ -179,16 +222,6 @@ export default function UserHome({ route, navigation }) {
                 2-2-2023
               </DataTable.Cell>
             </DataTable.Row>
-
-            <DataTable.Row style={{ borderWidth: 1 }}>
-              <DataTable.Cell numeric>150 </DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                علاج جناح
-              </DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                2-2-2023
-              </DataTable.Cell>
-            </DataTable.Row>
           </DataTable>
         </View>
 
@@ -212,7 +245,10 @@ export default function UserHome({ route, navigation }) {
             >
               المبلغ الاجمالي
             </Text>
-            <TextInput style={[styles.input, { marginTop: 10 }]} />
+            <TextInput
+              value={falcon.totalPrice}
+              style={[styles.input, { marginTop: 10 }]}
+            />
           </View>
         </View>
 
@@ -224,7 +260,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "20%", fontSize: 19 }}>المدفوع</Text>
-            <TextInput style={styles.input} />
+            <TextInput value={falcon.paid} style={styles.input} />
           </View>
           <View
             style={{
@@ -233,7 +269,7 @@ export default function UserHome({ route, navigation }) {
             }}
           >
             <Text style={{ width: "20%", fontSize: 19 }}>المتبقي </Text>
-            <TextInput style={styles.input} />
+            <TextInput value={falcon.unpaid} style={styles.input} />
           </View>
         </View>
       </View>
