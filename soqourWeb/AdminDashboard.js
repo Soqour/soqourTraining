@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
-export default function UserHome({ route, navigation }) {
-  const { qId, falconId } = route.params;
-  console.log(qId, "and ", falconId);
+export default function AdminDashboard({ route, navigation }) {
+  // const { qId, falconId } = route.params;
+  // console.log(qId, "and ", falconId);
 
   const [user, setUser] = useState({});
   useEffect(() => {
-    readUser();
+    // readUser();
   }, []);
   const readUser = async () => {
     const docRef = doc(db, "users", qId);
@@ -244,7 +244,7 @@ export default function UserHome({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: "#fff",
     alignItems: "center",
   },

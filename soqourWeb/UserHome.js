@@ -244,7 +244,7 @@ export default function UserHome({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: "#fff",
     alignItems: "center",
   },

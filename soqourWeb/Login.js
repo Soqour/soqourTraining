@@ -20,23 +20,31 @@ import { useState } from "react";
 
 export default function Login({ navigation }) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const go = () => {
-    // setFalconError(false);
-    navigation.navigate("AdminDashboard", { email: email, password: password });
-  };
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [signedIn, setSignedIn] = useState(false);
+  const [emailError, setEmailError] = useState("haha");
+  const [passError, setPassError] = useState("");
 
   const handleLogin = () => {
+    if (email == "") {
+      setEmailError("الرجاء ادخال الايميل");
+      return;
+    } else if (password == "") {
+      setPassError("الرجاء ادخال كلمة السر");
+      return;
+    }
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log("Logged in");
         setSignedIn(true);
-        navigation.replace("Home");
+        navigation.replace("AdminDashboard");
       })
       .catch((error) => {
         console.log(error.message);
+        setError("البريد او كلمة السر غير صحيحة");
         setSignedIn(false);
       });
   };
@@ -59,6 +67,9 @@ export default function Login({ navigation }) {
       </View>
       <View style={styles.body}>
         <Text style={{ fontSize: 23, marginBottom: 20 }}>Login</Text>
+
+        {/* <Text style={{ color: "red" }}>{emailError}</Text> */}
+
         <View
           style={{
             flexDirection: "row",
@@ -67,7 +78,12 @@ export default function Login({ navigation }) {
           }}
         >
           <Text style={{ width: "30%", fontSize: 19 }}>Email: </Text>
-          <TextInput style={styles.input} />
+
+          <TextInput
+            // onChangeText={setEmail}
+            // value={email}
+            style={styles.input}
+          />
         </View>
         <View
           style={{
@@ -77,9 +93,16 @@ export default function Login({ navigation }) {
           }}
         >
           <Text style={{ width: "30%", fontSize: 19 }}>Passowrd: </Text>
-          <TextInput style={styles.input} />
+          <TextInput
+            // onChangeText={setPassword}
+            // value={password}
+            style={styles.input}
+          />
         </View>
-        <Pressable style={styles.button}>
+        <Pressable
+          // onPress={handleLogin}
+          style={styles.button}
+        >
           <Text>Login</Text>
         </Pressable>
       </View>
@@ -90,7 +113,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: "#fff",
     alignItems: "center",
     // justifyContent: "center",
