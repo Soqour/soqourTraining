@@ -162,6 +162,7 @@ export default function FalconsAdmin({ route, navigation }) {
               >
                 {tableHead.map((x) => (
                   <DataTable.Cell
+                    key={x}
                     textStyle={{ fontSize: 22, color: "#fff" }}
                     numeric
                   >
@@ -171,12 +172,17 @@ export default function FalconsAdmin({ route, navigation }) {
               </DataTable.Header>
 
               {data.map((x) => (
-                <DataTable.Row style={{ borderWidth: 1 }}>
+                <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
                   <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
-                    <Image
-                      style={{ width: 25, height: 25 }}
-                      source={require("./assets/more.png")}
-                    />
+                    <Pressable
+                      style={{ width: "100%" }}
+                      onPress={() => navigation.navigate("FalconDetails")}
+                    >
+                      <Image
+                        style={{ width: 25, height: 25 }}
+                        source={require("./assets/more.png")}
+                      />
+                    </Pressable>
                   </DataTable.Cell>
                   <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
                     {x.total}

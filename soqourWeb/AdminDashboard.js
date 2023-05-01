@@ -167,6 +167,7 @@ export default function AdminDashboard({ route, navigation }) {
               >
                 {tableHead.map((x) => (
                   <DataTable.Cell
+                    key={x}
                     textStyle={{ fontSize: 22, color: "#fff" }}
                     numeric
                   >
@@ -176,7 +177,7 @@ export default function AdminDashboard({ route, navigation }) {
               </DataTable.Header>
 
               {data.map((x) => (
-                <DataTable.Row style={{ borderWidth: 1 }}>
+                <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
                   <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
                     {x.total}
                   </DataTable.Cell>

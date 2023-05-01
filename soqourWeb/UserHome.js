@@ -8,7 +8,14 @@ import {
   query,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+} from "react-native";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
 export default function UserHome({ route, navigation }) {
@@ -74,16 +81,57 @@ export default function UserHome({ route, navigation }) {
   };
   return (
     <View style={styles.container}>
-      <View style={{ borderBottomWidth: 2, width: "50%", paddingBottom: 30 }}>
-        <Text style={styles.title}>مركز العديد لتدريب الصقور </Text>
-      </View>
+      {/* -------Top---------- */}
       <View
         style={{
-          width: "50%",
+          borderBottomWidth: 2,
+          width: "100%",
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+        }}
+      >
+        <Image
+          style={{ width: 100, height: 100, marginRight: 30 }}
+          source={{
+            uri: "https://c0.klipartz.com/pngpicture/738/452/gratis-png-logotipo-del-aguila-calva-halcon.png",
+          }}
+        />
+        <View style={{ width: "80%" }}>
+          <Text style={styles.title}>مركز العديد لتدريب الصقور </Text>
+        </View>
+
+        <Pressable
+          onPress={() => navigation.navigate("Home")}
+          style={{ flexDirection: "row-reverse", margin: 30 }}
+        >
+          <Text style={{ width: 30, marginHorizontal: 5 }}>تسجيل خروج</Text>
+          <Image
+            style={{ width: 30, height: 30 }}
+            source={require("./assets/log-out.png")}
+          />
+        </Pressable>
+      </View>
+
+      <View
+        style={{
+          width: "60%",
+          padding: 20,
           paddingBottom: 70,
         }}
       >
-        <Text style={styles.bold}>المالك</Text>
+        <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              marginLeft: 15,
+              marginTop: 15,
+            }}
+            source={require("./assets/owner.png")}
+          />
+          <Text style={styles.bold}>المالك</Text>
+        </View>
+
         <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
           <View
             style={{
@@ -94,6 +142,7 @@ export default function UserHome({ route, navigation }) {
             <Text style={{ width: "15%", fontSize: 19 }}>الاسم</Text>
             <TextInput value={user.name} style={styles.input} readOnly />
           </View>
+
           <View
             style={{
               width: "55%",
@@ -125,7 +174,18 @@ export default function UserHome({ route, navigation }) {
 
         <View style={styles.border}></View>
 
-        <Text style={styles.bold}>فترة الاقامة</Text>
+        <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              marginLeft: 15,
+              marginTop: 15,
+            }}
+            source={require("./assets/date.png")}
+          />
+          <Text style={styles.bold}>فترة الاقامة</Text>
+        </View>
         <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
           <View
             style={{
@@ -162,12 +222,38 @@ export default function UserHome({ route, navigation }) {
 
         <View style={styles.border}></View>
 
-        <Text style={styles.bold}> التدريبات</Text>
+        <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              marginLeft: 15,
+              marginTop: 15,
+            }}
+            source={require("./assets/training.png")}
+          />
+          <Text style={styles.bold}> التدريبات</Text>
+        </View>
         <View style={{ marginTop: 15 }}>
           <DataTable>
-            <DataTable.Header style={{ borderWidth: 1 }}>
-              <DataTable.Cell numeric>التدريب</DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
+            <DataTable.Header
+              style={{
+                padding: 10,
+                borderWidth: 1,
+                backgroundColor: "#3974CE",
+              }}
+            >
+              <DataTable.Cell
+                numeric
+                textStyle={{ fontSize: 22, color: "#fff" }}
+              >
+                التدريب
+              </DataTable.Cell>
+              <DataTable.Cell
+                textStyle={{ fontSize: 22, color: "#fff" }}
+                style={{ borderLeftWidth: 1 }}
+                numeric
+              >
                 التاريخ
               </DataTable.Cell>
             </DataTable.Header>
@@ -190,15 +276,45 @@ export default function UserHome({ route, navigation }) {
 
         <View style={styles.border}></View>
 
-        <Text style={styles.bold}> العلاجات</Text>
+        <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              marginLeft: 15,
+              marginTop: 15,
+            }}
+            source={require("./assets/treatments.png")}
+          />
+          <Text style={styles.bold}> العلاجات</Text>
+        </View>
         <View style={{ marginTop: 15 }}>
           <DataTable>
-            <DataTable.Header style={{ borderWidth: 1 }}>
-              <DataTable.Cell numeric>المبلغ</DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
+            <DataTable.Header
+              style={{
+                padding: 10,
+                borderWidth: 1,
+                backgroundColor: "#3974CE",
+              }}
+            >
+              <DataTable.Cell
+                textStyle={{ fontSize: 22, color: "#fff" }}
+                numeric
+              >
+                المبلغ
+              </DataTable.Cell>
+              <DataTable.Cell
+                textStyle={{ fontSize: 22, color: "#fff" }}
+                style={{ borderLeftWidth: 1 }}
+                numeric
+              >
                 العلاج
               </DataTable.Cell>
-              <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
+              <DataTable.Cell
+                textStyle={{ fontSize: 22, color: "#fff" }}
+                style={{ borderLeftWidth: 1 }}
+                numeric
+              >
                 التاريخ
               </DataTable.Cell>
             </DataTable.Header>
@@ -285,11 +401,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 25,
+    marginTop: 25,
+    fontSize: 35,
   },
   bold: {
     textAlign: "right",
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
     marginTop: 25,
   },
@@ -302,7 +419,7 @@ const styles = StyleSheet.create({
   input: {
     width: "60%",
     height: 30,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#DEEBFF",
   },
   button: {
     marginTop: 10,
@@ -314,7 +431,7 @@ const styles = StyleSheet.create({
   },
   border: {
     width: "70%",
-    borderWidth: 1,
+    borderWidth: 0.7,
     marginTop: 50,
     marginLeft: 100,
   },
