@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
-export default function AdminDashboard({ route, navigation }) {
+export default function FalconsAdmin({ route, navigation }) {
   // const { qId, falconId } = route.params;
   // console.log(qId, "and ", falconId);
 
@@ -31,6 +31,7 @@ export default function AdminDashboard({ route, navigation }) {
   };
 
   const tableHead = [
+    "المزيد",
     "المجموع",
     "المتبقي",
     "المدفوع",
@@ -95,59 +96,53 @@ export default function AdminDashboard({ route, navigation }) {
         <View style={{ width: "17%", borderLeftWidth: 1 }}>
           <Pressable
             onPress={() => navigation.navigate("AdminDashboard")}
-            style={[styles.tab, { backgroundColor: "#709ADA" }]}
+            style={styles.tab}
           >
             <Text style={{ fontSize: 25 }}>الرئيسية</Text>
           </Pressable>
           <Pressable
             onPress={() => navigation.navigate("FalconsAdmin")}
-            style={styles.tab}
+            style={[styles.tab, { backgroundColor: "#709ADA" }]}
           >
             <Text style={{ fontSize: 25 }}>الطيور</Text>
           </Pressable>
         </View>
 
-        <View
-          style={{
-            width: "83%",
-          }}
-        >
+        <View style={{ width: "83%" }}>
           {/* -------Statistics--------- */}
-          <View style={{ flexDirection: "row-reverse" }}>
-            <View style={[styles.statistics, { backgroundColor: "#CDECC8" }]}>
-              <Image
-                style={{ width: 80, height: 80 }}
-                source={require("./assets/falcon.png")}
-              />
-              <Text style={{ fontSize: 22, width: "40%" }}>
-                اجمالي الطيور هذا الشهر
-              </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>50</Text>
-            </View>
-            <View style={[styles.statistics, { backgroundColor: "#EDD0AF" }]}>
-              <Image
-                style={{ width: 65, height: 65 }}
-                source={require("./assets/aidkit.png")}
-              />
-              <Text style={{ fontSize: 22, width: "40%" }}>
-                اجمالي الحالات الطبية هذا الشهر
-              </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>25</Text>
-            </View>
-            <View style={[styles.statistics, { backgroundColor: "#91D6F4" }]}>
-              <Image
-                style={{ width: 65, height: 65 }}
-                source={require("./assets/income.png")}
-              />
-              <Text style={{ fontSize: 22, width: "30%" }}>
-                اجمالي الدخل هذا الشهر
-              </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>2500</Text>
+          <View
+            style={{
+              alignItems: "flex-end",
+              //   padding: 10,
+            }}
+          >
+            <View
+              style={{
+                width: "81%",
+                margin: 30,
+                marginBottom: 0,
+                alignItems: "flex-end",
+                flexDirection: "row-reverse",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={{ fontSize: 35 }}>جميع الطيور </Text>
+              <Pressable
+                style={{
+                  width: 130,
+                  height: 40,
+                  //   borderWidth: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#CCF19C",
+                }}
+              >
+                <Text style={{ fontSize: 19 }}>اضافة طير</Text>
+              </Pressable>
             </View>
           </View>
 
           {/* ---------Table------------ */}
-
           <View
             style={{
               marginTop: 15,
@@ -157,10 +152,10 @@ export default function AdminDashboard({ route, navigation }) {
               paddingHorizontal: 20,
             }}
           >
-            <DataTable style={{ width: "85%" }}>
+            <DataTable style={{ width: "85%", borderWidth: 1 }}>
               <DataTable.Header
                 style={{
-                  padding: 5,
+                  padding: 10,
                   borderWidth: 1,
                   backgroundColor: "#3974CE",
                 }}
@@ -177,6 +172,12 @@ export default function AdminDashboard({ route, navigation }) {
 
               {data.map((x) => (
                 <DataTable.Row style={{ borderWidth: 1 }}>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                    <Image
+                      style={{ width: 25, height: 25 }}
+                      source={require("./assets/more.png")}
+                    />
+                  </DataTable.Cell>
                   <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
                     {x.total}
                   </DataTable.Cell>

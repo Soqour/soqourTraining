@@ -6,11 +6,12 @@ import Home from "./Home";
 import Login from "./Login";
 import UserHome from "./UserHome";
 import AdminDashboard from "./AdminDashboard";
+import FalconsAdmin from "./FalconsAdmin";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="FalconsAdmin">
         <Stack.Screen
           name="Home"
           component={Home}
@@ -29,6 +30,11 @@ export default function App() {
         <Stack.Screen
           name="AdminDashboard"
           component={AdminDashboard}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="FalconsAdmin"
+          component={FalconsAdmin}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
