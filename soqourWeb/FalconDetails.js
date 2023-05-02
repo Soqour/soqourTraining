@@ -123,7 +123,7 @@ export default function FalconDetails({ route, navigation }) {
           </Pressable>
           <Pressable
             onPress={() => navigation.navigate("FalconsAdmin")}
-            style={[styles.tab, { backgroundColor: "#709ADA" }]}
+            style={styles.tab}
           >
             <Text style={{ fontSize: 25 }}>الطيور</Text>
           </Pressable>
