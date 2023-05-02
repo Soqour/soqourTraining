@@ -58,7 +58,7 @@ export default function AdminDashboard({ route, navigation }) {
   ];
   return (
     <View style={styles.container}>
-      {/* -------Top---------- */}
+      {/* -------Header---------- */}
       <View
         style={{
           borderBottomWidth: 2,
@@ -68,7 +68,7 @@ export default function AdminDashboard({ route, navigation }) {
         }}
       >
         <Image
-          style={{ width: 100, height: 100, marginRight: 30 }}
+          style={{ width: 70, height: 70, marginRight: 30, marginTop: "0.5%" }}
           source={{
             uri: "https://c0.klipartz.com/pngpicture/738/452/gratis-png-logotipo-del-aguila-calva-halcon.png",
           }}
@@ -92,57 +92,84 @@ export default function AdminDashboard({ route, navigation }) {
       {/* ---------Body---------- */}
       <View style={styles.body}>
         {/* -------------Tabs---------------- */}
-        <View style={{ width: "17%", borderLeftWidth: 1 }}>
+        <View style={{ width: "12%", borderLeftWidth: 1 }}>
           <Pressable
             onPress={() => navigation.navigate("AdminDashboard")}
             style={[styles.tab, { backgroundColor: "#709ADA" }]}
           >
-            <Text style={{ fontSize: 25 }}>الرئيسية</Text>
+            <Text style={{ fontSize: 20 }}>الرئيسية</Text>
           </Pressable>
           <Pressable
             onPress={() => navigation.navigate("FalconsAdmin")}
             style={styles.tab}
           >
-            <Text style={{ fontSize: 25 }}>الطيور</Text>
+            <Text style={{ fontSize: 20 }}>الطيور</Text>
           </Pressable>
         </View>
-
         <View
           style={{
-            width: "83%",
+            width: "93%",
+            marginRight: "5%",
           }}
         >
           {/* -------Statistics--------- */}
           <View style={{ flexDirection: "row-reverse" }}>
-            <View style={[styles.statistics, { backgroundColor: "#CDECC8" }]}>
+            <View
+              style={[
+                styles.statistics,
+                { backgroundColor: "#CDECC8", borderRadius: 10 },
+              ]}
+            >
               <Image
                 style={{ width: 80, height: 80 }}
                 source={require("./assets/falcon.png")}
               />
-              <Text style={{ fontSize: 22, width: "40%" }}>
-                اجمالي الطيور هذا الشهر
+              <Text style={{ fontSize: 19, width: "40%" }}>
+                اجمالي عدد الطيور لهذا الشهر
               </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>50</Text>
+              <Text
+                style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
+              >
+                50
+              </Text>
             </View>
-            <View style={[styles.statistics, { backgroundColor: "#EDD0AF" }]}>
+            <View
+              style={[
+                styles.statistics,
+                { backgroundColor: "#EDD0AF", borderRadius: 10 },
+              ]}
+            >
               <Image
                 style={{ width: 65, height: 65 }}
                 source={require("./assets/aidkit.png")}
               />
-              <Text style={{ fontSize: 22, width: "40%" }}>
-                اجمالي الحالات الطبية هذا الشهر
+              <Text style={{ fontSize: 19, width: "40%" }}>
+                اجمالي الحالات الطبية لهذا الشهر
               </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>25</Text>
+              <Text
+                style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
+              >
+                25
+              </Text>
             </View>
-            <View style={[styles.statistics, { backgroundColor: "#91D6F4" }]}>
+            <View
+              style={[
+                styles.statistics,
+                { backgroundColor: "#91D6F4", borderRadius: 10 },
+              ]}
+            >
               <Image
                 style={{ width: 65, height: 65 }}
                 source={require("./assets/income.png")}
               />
-              <Text style={{ fontSize: 22, width: "30%" }}>
+              <Text style={{ fontSize: 20, width: "30%" }}>
                 اجمالي الدخل هذا الشهر
               </Text>
-              <Text style={{ fontSize: 22, marginLeft: 20 }}>2500</Text>
+              <Text
+                style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
+              >
+                2500
+              </Text>
             </View>
           </View>
 
@@ -151,8 +178,9 @@ export default function AdminDashboard({ route, navigation }) {
           <View
             style={{
               marginTop: 15,
-              width: "100%",
+              width: "98%",
               // justifyContent:""
+              marginLeft: "2%",
               alignItems: "flex-end",
               paddingHorizontal: 20,
             }}
@@ -168,8 +196,15 @@ export default function AdminDashboard({ route, navigation }) {
                 {tableHead.map((x) => (
                   <DataTable.Cell
                     key={x}
-                    textStyle={{ fontSize: 22, color: "#fff" }}
-                    numeric
+                    textStyle={{
+                      fontSize: 19,
+                      color: "#fff",
+                      fontWeight: "bold",
+                      alignSelf: "center",
+                      // justifyContent: "center",
+                      marginLeft: "30%",
+                    }}
+                    // numeric
                   >
                     {x}
                   </DataTable.Cell>
@@ -177,23 +212,43 @@ export default function AdminDashboard({ route, navigation }) {
               </DataTable.Header>
 
               {data.map((x) => (
-                <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                <DataTable.Row
+                  key={x.id}
+                  style={{
+                    borderWidth: 1,
+                    alignText: "center",
+                    // paddingLeft: "35%",
+                    // paddingLeft: "10%",
+                  }}
+                >
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.total}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.unpaid}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.paid}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.duration}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.number}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.id}
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -215,7 +270,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 25,
-    fontSize: 35,
+    fontSize: 26,
   },
   bold: {
     textAlign: "right",
@@ -229,7 +284,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   tab: {
-    height: "10%",
+    height: "6%",
     justifyContent: "center",
     alignItems: "center",
     borderBottomWidth: 1,
