@@ -13,7 +13,6 @@ import {
   Modal,
   Button,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
 export default function FalconsAdmin({ route, navigation }) {
@@ -180,10 +179,9 @@ export default function FalconsAdmin({ route, navigation }) {
                       color: "#fff",
                       fontWeight: "bold",
                       alignSelf: "center",
-                      // justifyContent: "center",
                       marginLeft: "30%",
                     }}
-                    // numeric
+                    numeric
                   >
                     {x}
                   </DataTable.Cell>
@@ -191,57 +189,42 @@ export default function FalconsAdmin({ route, navigation }) {
               </DataTable.Header>
 
               {data.map((x) => (
-                <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
-                  <TouchableOpacity
-                    style={{
-                      width: 50,
-                      height: 50,
-                      marginLeft: "10%",
-                      backgroundColor: "red",
-                    }}
-                    // onPress={() => navigation.navigate("FalconDetails")}
-                    // on
-                    onPress={() => {
-                      Alert.alert("You clicked it!", "You clicked it!");
-                    }}
-                  >
-                    {" "}
-                    <DataTable.Cell
-                      // onPress={() => navigation.navigate("FalconDetails")}
-                      textStyle={{
-                        fontSize: 16,
-                        paddingLeft: "20%",
-                        paddingTop: "30%",
-                      }}
-                      // numeric
-                    >
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("FalconDetails");
+                  }}
+                >
+                  <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
+                    <DataTable.Cell numeric>
                       <Image
                         style={{ width: 25, height: 25 }}
                         source={require("./assets/more.png")}
                       />
                     </DataTable.Cell>
-                  </TouchableOpacity>
-                  <DataTable.Cell
-                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
-                  >
-                    {x.total}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
-                    {x.unpaid}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
-                    {x.paid}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
-                    {x.duration}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
-                    {x.number}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
-                    {x.id}
-                  </DataTable.Cell>
-                </DataTable.Row>
+
+                    <DataTable.Cell
+                      numeric
+                      textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                    >
+                      {x.total}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                      {x.unpaid}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                      {x.paid}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                      {x.duration}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                      {x.number}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                      {x.id}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                </Pressable>
               ))}
             </DataTable>
           </View>
