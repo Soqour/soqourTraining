@@ -1,0 +1,31 @@
+{
+  "files": {
+    "app.js": "/static/js/app.a90c08f5.chunk.js",
+    "app.js.map": "/static/js/app.a90c08f5.chunk.js.map",
+    "runtime~app.js": "/static/js/runtime~app.27401809.js",
+    "runtime~app.js.map": "/static/js/runtime~app.27401809.js.map",
+    "static/js/2.f8616619.chunk.js": "/static/js/2.f8616619.chunk.js",
+    "static/js/2.f8616619.chunk.js.map": "/static/js/2.f8616619.chunk.js.map",
+    "fonts/MaterialCommunityIcons.ttf": "/./fonts/MaterialCommunityIcons.ttf",
+    "favicon-16.png": "/favicon-16.png",
+    "favicon-32.png": "/favicon-32.png",
+    "favicon.ico": "/favicon.ico",
+    "index.html": "/index.html",
+    "manifest.json": "/manifest.json",
+    "serve.json": "/serve.json",
+    "static/js/2.f8616619.chunk.js.LICENSE.txt": "/static/js/2.f8616619.chunk.js.LICENSE.txt",
+    "static/media/aidkit.png": "/static/media/aidkit.3ac56178.png",
+    "static/media/date.png": "/static/media/date.580b51cf.png",
+    "static/media/falcon.png": "/static/media/falcon.173881e7.png",
+    "static/media/income.png": "/static/media/income.5ad37101.png",
+    "static/media/log-out.png": "/static/media/log-out.28370cdb.png",
+    "static/media/owner.png": "/static/media/owner.6a93ffef.png",
+    "static/media/training.png": "/static/media/training.d0f624c1.png",
+    "static/media/treatments.png": "/static/media/treatments.a28a391a.png"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.27401809.js",
+    "static/js/2.f8616619.chunk.js",
+    "static/js/app.a90c08f5.chunk.js"
+  ]
+}
