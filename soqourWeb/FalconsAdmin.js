@@ -9,16 +9,17 @@ import {
   View,
   Image,
   Block,
-  TouchableOpacity,
+  // TouchableOpacity,
   Modal,
   Button,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
 export default function FalconsAdmin({ route, navigation }) {
   // const { qId, falconId } = route.params;
   // console.log(qId, "and ", falconId);
-  const [addModalVisible, setAddModalVisible] = useState(true);
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function FalconsAdmin({ route, navigation }) {
   ];
   return (
     <View style={styles.container}>
-      {/* -------Top---------- */}
+      {/* -------Header---------- */}
       <View
         style={{
           borderBottomWidth: 2,
@@ -74,7 +75,7 @@ export default function FalconsAdmin({ route, navigation }) {
         }}
       >
         <Image
-          style={{ width: 100, height: 100, marginRight: 30 }}
+          style={{ width: 70, height: 70, marginRight: 30, marginTop: "0.5%" }}
           source={{
             uri: "https://c0.klipartz.com/pngpicture/738/452/gratis-png-logotipo-del-aguila-calva-halcon.png",
           }}
@@ -98,22 +99,26 @@ export default function FalconsAdmin({ route, navigation }) {
       {/* ---------Body---------- */}
       <View style={styles.body}>
         {/* -------------Tabs---------------- */}
-        <View style={{ width: "17%", borderLeftWidth: 1 }}>
+        <View style={{ width: "12%", borderLeftWidth: 1 }}>
           <Pressable
             onPress={() => navigation.navigate("AdminDashboard")}
-            style={styles.tab}
+            style={[styles.tab]}
           >
-            <Text style={{ fontSize: 25 }}>الرئيسية</Text>
+            <Text style={{ fontSize: 20 }}>الرئيسية</Text>
           </Pressable>
           <Pressable
             onPress={() => navigation.navigate("FalconsAdmin")}
             style={[styles.tab, { backgroundColor: "#709ADA" }]}
           >
-            <Text style={{ fontSize: 25 }}>الطيور</Text>
+            <Text style={{ fontSize: 20 }}>الطيور</Text>
           </Pressable>
         </View>
-
-        <View style={{ width: "83%" }}>
+        <View
+          style={{
+            width: "93%",
+            marginRight: "5%",
+          }}
+        >
           {/* -------Statistics--------- */}
           <View
             style={{
@@ -141,6 +146,7 @@ export default function FalconsAdmin({ route, navigation }) {
                   justifyContent: "center",
                   alignItems: "center",
                   backgroundColor: "#CCF19C",
+                  borderRadius: 5,
                 }}
               >
                 <Text style={{ fontSize: 19 }}>اضافة طير</Text>
@@ -161,7 +167,7 @@ export default function FalconsAdmin({ route, navigation }) {
             <DataTable style={{ width: "85%", borderWidth: 1 }}>
               <DataTable.Header
                 style={{
-                  padding: 10,
+                  padding: 5,
                   borderWidth: 1,
                   backgroundColor: "#3974CE",
                 }}
@@ -169,8 +175,15 @@ export default function FalconsAdmin({ route, navigation }) {
                 {tableHead.map((x) => (
                   <DataTable.Cell
                     key={x}
-                    textStyle={{ fontSize: 22, color: "#fff" }}
-                    numeric
+                    textStyle={{
+                      fontSize: 19,
+                      color: "#fff",
+                      fontWeight: "bold",
+                      alignSelf: "center",
+                      // justifyContent: "center",
+                      marginLeft: "30%",
+                    }}
+                    // numeric
                   >
                     {x}
                   </DataTable.Cell>
@@ -179,37 +192,53 @@ export default function FalconsAdmin({ route, navigation }) {
 
               {data.map((x) => (
                 <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
-                  <DataTable.Cell
+                  <TouchableOpacity
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginLeft: "10%",
+                      backgroundColor: "red",
+                    }}
                     // onPress={() => navigation.navigate("FalconDetails")}
-                    textStyle={{ fontSize: 16 }}
-                    numeric
+                    // on
+                    onPress={() => {
+                      Alert.alert("You clicked it!", "You clicked it!");
+                    }}
                   >
-                    <TouchableOpacity
-                      style={{ width: 50, borderWidth: 1, height: 50 }}
-                      onPress={() => navigation.navigate("FalconDetails")}
+                    {" "}
+                    <DataTable.Cell
+                      // onPress={() => navigation.navigate("FalconDetails")}
+                      textStyle={{
+                        fontSize: 16,
+                        paddingLeft: "20%",
+                        paddingTop: "30%",
+                      }}
+                      // numeric
                     >
                       <Image
                         style={{ width: 25, height: 25 }}
                         source={require("./assets/more.png")}
                       />
-                    </TouchableOpacity>
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                    </DataTable.Cell>
+                  </TouchableOpacity>
+                  <DataTable.Cell
+                    textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                  >
                     {x.total}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
                     {x.unpaid}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
                     {x.paid}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
                     {x.duration}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
                     {x.number}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ fontSize: 16 }} numeric>
+                  <DataTable.Cell textStyle={{ fontSize: 16 }}>
                     {x.id}
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -354,7 +383,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 25,
-    fontSize: 35,
+    fontSize: 26,
   },
   bold: {
     textAlign: "right",
@@ -368,7 +397,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   tab: {
-    height: "10%",
+    height: "6%",
     justifyContent: "center",
     alignItems: "center",
     borderBottomWidth: 1,
