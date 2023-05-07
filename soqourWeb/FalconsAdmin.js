@@ -1,5 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import {
   Pressable,
@@ -19,20 +28,37 @@ export default function FalconsAdmin({ route, navigation }) {
   // const { qId, falconId } = route.params;
   // console.log(qId, "and ", falconId);
   const [addModalVisible, setAddModalVisible] = useState(false);
+  const [f, setF] = useState(false);
 
-  const [user, setUser] = useState({});
+  const [users, setUsers] = useState([]);
+  const [falcons, setFalcons] = useState([]);
+
+  const [id, setId] = useState("");
+  const [simId, setSimId] = useState("");
+
+  const [name, setName] = useState("");
+  const [qId, setQId] = useState("");
+  const [phone, setPhone] = useState("");
+  const [entryDate, setEntryDate] = useState("");
+  const [exitDate, setExitDate] = useState("");
+  const [duration, setDuration] = useState("");
+
   useEffect(() => {
-    // readUser();
+    readFalcons();
   }, []);
-  const readUser = async () => {
-    const docRef = doc(db, "users", qId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      setUser(docSnap.data());
-    } else {
-      console.log("No such document!");
-    }
+
+  const readFalcons = async () => {
+    const collectionRef = collection(db, "soqour");
+    const q = query(collectionRef);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      console.log("snapshot");
+
+      setFalcons(querySnapshot.docs.map((doc) => doc.data()));
+    });
+    setF(true);
+    console.log("falconsssss", falcons);
+
+    return () => unsubscribe();
   };
 
   const tableHead = [
@@ -44,24 +70,64 @@ export default function FalconsAdmin({ route, navigation }) {
     "رقم شريحة الطير",
     "رقم الطير",
   ];
-  const data = [
-    {
-      total: 250,
-      unpaid: 50,
-      paid: 200,
-      duration: 28,
-      number: 234561234,
-      id: 600123,
-    },
-    {
-      total: 300,
-      unpaid: 100,
-      paid: 200,
-      duration: 20,
-      number: 2654261234,
-      id: 600124,
-    },
-  ];
+
+  const addFalcon = async () => {
+    //  setTreatmentModalVisible(false);
+    const docRef = await addDoc(collection(db, "soqour"), {
+      id: id,
+      entryDate: entryDate,
+      exitDate: exitDate,
+      duration: duration,
+      simId: simId,
+      totalPrice: 0,
+      paid: 0,
+      unpaid: 0,
+      qId: qId,
+    });
+    //  readTreatments();
+    console.log("Tretment added  with ID: ", docRef.id);
+  };
+
+  const addUser = async () => {
+    const docRef = doc(db, "users", qId);
+    await setDoc(docRef, { qId: qId, name: name, phone: phone })
+      .then(() => {
+        console.log("User added");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const addFalconInUser = async () => {
+    const docRef = doc(db, "users", qId, "soqour", id);
+    await setDoc(docRef, {
+      id: id,
+      entryDate: entryDate,
+      exitDate: exitDate,
+      duration: duration,
+      simId: simId,
+      totalPrice: 0,
+      paid: 0,
+      unpaid: 0,
+    })
+      .then(() => {
+        console.log("Saqer added");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const add = () => {
+    setAddModalVisible(false);
+    addFalcon();
+    addUser();
+    addFalconInUser();
+    readFalcons();
+    alert("تم اضافة الطير");
+  };
+
   return (
     <View style={styles.container}>
       {/* -------Header---------- */}
@@ -188,44 +254,45 @@ export default function FalconsAdmin({ route, navigation }) {
                 ))}
               </DataTable.Header>
 
-              {data.map((x) => (
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("FalconDetails");
-                  }}
-                >
-                  <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
-                    <DataTable.Cell numeric>
-                      <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require("./assets/more.png")}
-                      />
-                    </DataTable.Cell>
+              {falcons &&
+                falcons.map((x) => (
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("FalconDetails");
+                    }}
+                  >
+                    <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
+                      <DataTable.Cell numeric>
+                        <Image
+                          style={{ width: 25, height: 25 }}
+                          source={require("./assets/more.png")}
+                        />
+                      </DataTable.Cell>
 
-                    <DataTable.Cell
-                      numeric
-                      textStyle={{ fontSize: 16, paddingLeft: "35%" }}
-                    >
-                      {x.total}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                      {x.unpaid}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                      {x.paid}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                      {x.duration}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                      {x.number}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                      {x.id}
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                </Pressable>
-              ))}
+                      <DataTable.Cell
+                        numeric
+                        textStyle={{ fontSize: 16, paddingLeft: "35%" }}
+                      >
+                        {x.totalPrice}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                        {x.unpaid}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                        {x.paid}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                        {x.duration}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                        {x.simId}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
+                        {x.id}
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  </Pressable>
+                ))}
             </DataTable>
           </View>
         </View>
@@ -240,7 +307,7 @@ export default function FalconsAdmin({ route, navigation }) {
                   width: 50,
                   height: 50,
                   marginLeft: 15,
-                  marginTop: 15,
+                  marginTop: 5,
                 }}
                 source={require("./assets/owner.png")}
               />
@@ -254,7 +321,11 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
               >
                 <Text style={{ width: "15%", fontSize: 19 }}>الاسم</Text>
-                <TextInput style={styles.input} readOnly />
+                <TextInput
+                  style={styles.input}
+                  value={name}
+                  onChangeText={setName}
+                />
               </View>
 
               <View
@@ -264,7 +335,11 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
               >
                 <Text style={{ width: "30%", fontSize: 19 }}>الرقم الشخصي</Text>
-                <TextInput style={styles.input} readOnly />
+                <TextInput
+                  style={styles.input}
+                  value={qId}
+                  onChangeText={setQId}
+                />
               </View>
             </View>
             <Text style={styles.bold}>معلومات الاتصال</Text>
@@ -281,10 +356,60 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
               >
                 <Text style={{ width: "30%", fontSize: 19 }}>رقم الجوال</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  value={phone}
+                  onChangeText={setPhone}
+                />
               </View>
             </View>
             <View style={styles.border}></View>
+
+            <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginLeft: 15,
+                  marginTop: 15,
+                }}
+                source={require("./assets/training.png")}
+              />
+              <Text style={styles.bold}>الطير</Text>
+            </View>
+            <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
+              <View
+                style={{
+                  width: "45%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "15%", fontSize: 19 }}>الرقم</Text>
+                <TextInput
+                  style={styles.input}
+                  value={id}
+                  onChangeText={setId}
+                />
+              </View>
+
+              <View
+                style={{
+                  width: "55%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "30%", fontSize: 19 }}>
+                  الرقم التسلسلي
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  value={simId}
+                  onChangeText={setSimId}
+                />
+              </View>
+            </View>
+            <View style={styles.border}></View>
+
             <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
               <Image
                 style={{
@@ -295,6 +420,7 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
                 source={require("./assets/date.png")}
               />
+
               <Text style={styles.bold}>فترة الاقامة</Text>
             </View>
             <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
@@ -305,7 +431,11 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
               >
                 <Text style={{ width: "30%", fontSize: 19 }}>تاريخ الدخول</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  value={entryDate}
+                  onChangeText={setEntryDate}
+                />
               </View>
               <View
                 style={{
@@ -314,7 +444,11 @@ export default function FalconsAdmin({ route, navigation }) {
                 }}
               >
                 <Text style={{ width: "30%", fontSize: 19 }}>تاريخ الخروج</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  value={exitDate}
+                  onChangeText={setExitDate}
+                />
               </View>
             </View>
             <View
@@ -327,7 +461,11 @@ export default function FalconsAdmin({ route, navigation }) {
               }}
             >
               <Text style={{ width: "30%", fontSize: 19 }}>اجمالي الفترة</Text>
-              <TextInput style={styles.input} />
+              <TextInput
+                style={styles.input}
+                value={duration}
+                onChangeText={setDuration}
+              />
             </View>
 
             <View
@@ -337,10 +475,7 @@ export default function FalconsAdmin({ route, navigation }) {
                 width: "30%",
               }}
             >
-              <Pressable
-                onPress={() => setAddModalVisible(false)}
-                style={styles.button}
-              >
+              <Pressable onPress={add} style={styles.button}>
                 <Text style={{ color: "#fff" }}>حفط</Text>
               </Pressable>
               <Pressable
@@ -409,15 +544,15 @@ const styles = StyleSheet.create({
   centeredView: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
+    marginTop: 10,
   },
   modalView: {
-    width: "80%",
+    width: "75%",
     backgroundColor: "white",
     borderRadius: 20,
     padding: "3%",
     paddingBottom: "5%",
-    borderWidth: 0.8,
+    borderWidth: 1,
     alignSelf: "center",
     shadowColor: "black",
     shadowOffset: {

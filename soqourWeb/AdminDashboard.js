@@ -17,7 +17,7 @@ export default function AdminDashboard({ route, navigation }) {
 
   const [user, setUser] = useState({});
   useEffect(() => {
-    // readUser();
+    readFalcons();
   }, []);
   const readUser = async () => {
     const docRef = doc(db, "users", qId);
@@ -30,6 +30,20 @@ export default function AdminDashboard({ route, navigation }) {
     }
   };
 
+  const [falcons, setFalcons] = useState([]);
+
+  const readFalcons = async () => {
+    const collectionRef = collection(db, "soqour");
+    const q = query(collectionRef);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      console.log("snapshot");
+
+      setFalcons(querySnapshot.docs.map((doc) => doc.data()));
+    });
+    console.log("falconsssss", falcons);
+
+    return () => unsubscribe();
+  };
   const tableHead = [
     "المجموع",
     "المتبقي",
@@ -130,7 +144,7 @@ export default function AdminDashboard({ route, navigation }) {
               <Text
                 style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
               >
-                50
+                {falcons.length}
               </Text>
             </View>
             <View
@@ -211,7 +225,7 @@ export default function AdminDashboard({ route, navigation }) {
                 ))}
               </DataTable.Header>
 
-              {data.map((x) => (
+              {falcons.map((x) => (
                 <DataTable.Row
                   key={x.id}
                   style={{
@@ -224,7 +238,7 @@ export default function AdminDashboard({ route, navigation }) {
                   <DataTable.Cell
                     textStyle={{ fontSize: 16, paddingLeft: "35%" }}
                   >
-                    {x.total}
+                    {x.totalPrice}
                   </DataTable.Cell>
                   <DataTable.Cell
                     textStyle={{ fontSize: 16, paddingLeft: "35%" }}
