@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -15,6 +16,7 @@ import {
   TextInput,
   View,
   Image,
+  Modal,
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
@@ -28,6 +30,14 @@ export default function FalconDetails({ route, navigation }) {
   const [falcon, setFalcon] = useState({});
   const [treatments, setTreatments] = useState([]);
   const [training, setTraining] = useState([]);
+  const [train, setTrain] = useState("");
+  const [trainDate, setTrainDate] = useState("");
+  const [treat, setTreat] = useState("");
+  const [treatDate, setTreatDate] = useState("");
+  const [treatPrice, setTreatPrice] = useState(0);
+
+  const [treatmentModalVisible, setTreatmentModalVisible] = useState(false);
+  const [trainingModalVisible, setTrainingModalVisible] = useState(false);
 
   useEffect(() => {
     readUser();
@@ -66,18 +76,50 @@ export default function FalconDetails({ route, navigation }) {
     let temp = [];
     const docs = await getDocs(q);
     docs.forEach((doc) => {
+      temp.push(doc.data());
       console.log(doc.id, " => ", doc.data());
     });
+    setTraining(temp);
   };
   //Treatments
   const readTreatments = async () => {
     const q = query(
       collection(db, "users", qId, "soqour", falconId, "treatments")
     );
+    let temp = [];
     const docs = await getDocs(q);
     docs.forEach((doc) => {
+      temp.push(doc.data());
       console.log(doc.id, " => ", doc.data());
     });
+    setTreatments(temp);
+  };
+
+  const addTrain = async () => {
+    setTrainingModalVisible(false);
+    const docRef = await addDoc(
+      collection(db, "users", qId, "soqour", falconId, "training"),
+      {
+        train: train,
+        date: trainDate,
+      }
+    );
+    readTraining();
+    console.log("Train added  with ID: ", docRef.id);
+  };
+
+  const addTreatment = async () => {
+    setTreatmentModalVisible(false);
+    const docRef = await addDoc(
+      collection(db, "users", qId, "soqour", falconId, "treatments"),
+      {
+        treatment: treat,
+        date: treatDate,
+        price: treatPrice,
+      }
+    );
+    readTreatments();
+    console.log("Tretment added  with ID: ", docRef.id);
   };
   return (
     <View style={styles.container}>
@@ -115,6 +157,12 @@ export default function FalconDetails({ route, navigation }) {
       <View style={styles.body}>
         {/* -------------Tabs---------------- */}
         <View style={{ width: "17%", borderLeftWidth: 1 }}>
+          <Pressable
+            onPress={() => navigation.navigate("FalconsAdmin")}
+            style={styles.tab}
+          >
+            <Text style={{ fontSize: 25 }}>عودة</Text>
+          </Pressable>
           <Pressable
             onPress={() => navigation.navigate("AdminDashboard")}
             style={styles.tab}
@@ -236,7 +284,7 @@ export default function FalconDetails({ route, navigation }) {
             }}
           >
             <Text style={{ width: "30%", fontSize: 19 }}> اجمالي الفترة </Text>
-            <TextInput style={styles.input} />
+            <TextInput style={styles.input} value={`${falcon.duration} يوم `} />
           </View>
 
           <View style={styles.border}></View>
@@ -277,19 +325,14 @@ export default function FalconDetails({ route, navigation }) {
                 </DataTable.Cell>
               </DataTable.Header>
 
-              <DataTable.Row style={{ borderWidth: 1 }}>
-                <DataTable.Cell numeric>طيران سفلي</DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  2-2-2023
-                </DataTable.Cell>
-              </DataTable.Row>
-
-              <DataTable.Row style={{ borderWidth: 1 }}>
-                <DataTable.Cell numeric>طيران سفلي</DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  2-2-2023
-                </DataTable.Cell>
-              </DataTable.Row>
+              {training.map((x) => (
+                <DataTable.Row style={{ borderWidth: 1 }}>
+                  <DataTable.Cell numeric>{x.train}</DataTable.Cell>
+                  <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
+                    {x.date}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
             </DataTable>
 
             <View
@@ -300,7 +343,10 @@ export default function FalconDetails({ route, navigation }) {
                 height: "50%",
               }}
             >
-              <Pressable style={styles.add}>
+              <Pressable
+                onPress={() => setTrainingModalVisible(true)}
+                style={styles.add}
+              >
                 <Text style={{ fontSize: 20 }}>اضافة تدريب</Text>
               </Pressable>
             </View>
@@ -351,25 +397,26 @@ export default function FalconDetails({ route, navigation }) {
                 </DataTable.Cell>
               </DataTable.Header>
 
-              <DataTable.Row style={{ borderWidth: 1 }}>
-                <DataTable.Cell numeric>150 </DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  علاج جناح
-                </DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  2-2-2023
-                </DataTable.Cell>
-              </DataTable.Row>
+              {treatments.map((x) => (
+                <DataTable.Row style={{ borderWidth: 1, padding: 5 }}>
+                  <DataTable.Cell style={{ padding: 5 }} numeric>
+                    {x.price}
+                  </DataTable.Cell>
+                  <DataTable.Cell
+                    style={{ borderLeftWidth: 1, padding: 5 }}
+                    numeric
+                  >
+                    {x.treatment}
+                  </DataTable.Cell>
 
-              <DataTable.Row style={{ borderWidth: 1 }}>
-                <DataTable.Cell numeric>150 </DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  علاج جناح
-                </DataTable.Cell>
-                <DataTable.Cell style={{ borderLeftWidth: 1 }} numeric>
-                  2-2-2023
-                </DataTable.Cell>
-              </DataTable.Row>
+                  <DataTable.Cell
+                    style={{ borderLeftWidth: 1, padding: 5 }}
+                    numeric
+                  >
+                    {x.date}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
             </DataTable>
 
             <View
@@ -380,7 +427,10 @@ export default function FalconDetails({ route, navigation }) {
                 height: "50%",
               }}
             >
-              <Pressable style={styles.add}>
+              <Pressable
+                onPress={() => setTreatmentModalVisible(true)}
+                style={styles.add}
+              >
                 <Text style={{ fontSize: 20 }}>اضافة علاج</Text>
               </Pressable>
             </View>
@@ -413,7 +463,13 @@ export default function FalconDetails({ route, navigation }) {
             </View>
           </View>
 
-          <View style={{ marginTop: 30, flexDirection: "row-reverse" }}>
+          <View
+            style={{
+              marginTop: 30,
+              flexDirection: "row-reverse",
+              paddingBottom: 80,
+            }}
+          >
             <View
               style={{
                 width: "50%",
@@ -435,6 +491,171 @@ export default function FalconDetails({ route, navigation }) {
           </View>
         </View>
       </View>
+
+      {/* -----------treatment modal-------------- */}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={treatmentModalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginLeft: 15,
+                  marginTop: 15,
+                }}
+                source={require("./assets/treatments.png")}
+              />
+              <Text style={styles.bold}>اضافة علاج</Text>
+            </View>
+            <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
+              <View
+                style={{
+                  width: "45%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "15%", fontSize: 19 }}>العلاج</Text>
+                <TextInput
+                  style={styles.input}
+                  value={treat}
+                  onChangeText={setTreat}
+                />
+              </View>
+
+              <View
+                style={{
+                  width: "55%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "30%", fontSize: 19 }}>التاريخ</Text>
+                <TextInput
+                  style={styles.input}
+                  value={treatDate}
+                  onChangeText={setTreatDate}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 9,
+                flexDirection: "row-reverse",
+              }}
+            >
+              <View
+                style={{
+                  width: "55%",
+                  flexDirection: "row-reverse",
+                  margin: 30,
+                }}
+              >
+                <Text style={{ width: "30%", fontSize: 19 }}>السعر </Text>
+                <TextInput
+                  keyboardType="number"
+                  style={styles.input}
+                  value={treatPrice}
+                  onChangeText={setTreatPrice}
+                />
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "30%",
+              }}
+            >
+              <Pressable onPress={addTreatment} style={styles.button}>
+                <Text style={{ color: "#fff" }}>حفط</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setTreatmentModalVisible(false)}
+                style={styles.cancelButton}
+              >
+                <Text style={{ color: "#fff" }}>اغلاق</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* -----------training modal-------------- */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={trainingModalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ flexDirection: "row-reverse", marginBottom: 15 }}>
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginLeft: 15,
+                  marginTop: 15,
+                }}
+                source={require("./assets/training.png")}
+              />
+              <Text style={styles.bold}>اضافة تدريب</Text>
+            </View>
+            <View style={{ marginTop: 9, flexDirection: "row-reverse" }}>
+              <View
+                style={{
+                  width: "45%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "15%", fontSize: 19 }}>التدريب</Text>
+                <TextInput
+                  style={styles.input}
+                  value={train}
+                  onChangeText={setTrain}
+                />
+              </View>
+
+              <View
+                style={{
+                  width: "55%",
+                  flexDirection: "row-reverse",
+                }}
+              >
+                <Text style={{ width: "30%", fontSize: 19 }}>التاريخ</Text>
+                <TextInput
+                  style={styles.input}
+                  value={trainDate}
+                  onChangeText={setTrainDate}
+                />
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "30%",
+              }}
+            >
+              <Pressable onPress={addTrain} style={styles.button}>
+                <Text style={{ color: "#fff" }}>حفط</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setTrainingModalVisible(false)}
+                style={styles.cancelButton}
+              >
+                <Text style={{ color: "#fff" }}>اغلاق</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -493,5 +714,47 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#CCF19C",
+  },
+  centeredView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 100,
+  },
+  modalView: {
+    width: "60%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: "3%",
+    paddingBottom: "5%",
+    borderWidth: 0.8,
+    alignSelf: "center",
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    width: 100,
+    padding: 10,
+    backgroundColor: "#4CAC3C",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "10%",
+  },
+  cancelButton: {
+    borderRadius: 10,
+    width: 100,
+    padding: 10,
+    backgroundColor: "#F5365C",
+    alignSelf: "center",
+    // marginLeft: "30%",
+    alignItems: "center",
+    marginTop: "10%",
   },
 });
