@@ -72,8 +72,8 @@ export default function FalconsAdmin({ route, navigation }) {
   ];
 
   const addFalcon = async () => {
-    //  setTreatmentModalVisible(false);
-    const docRef = await addDoc(collection(db, "soqour"), {
+    const docRef = doc(db, "soqour", id);
+    await setDoc(docRef, {
       id: id,
       entryDate: entryDate,
       exitDate: exitDate,
@@ -83,9 +83,13 @@ export default function FalconsAdmin({ route, navigation }) {
       paid: 0,
       unpaid: 0,
       qId: qId,
-    });
-    //  readTreatments();
-    console.log("Tretment added  with ID: ", docRef.id);
+    })
+      .then(() => {
+        console.log("falcon added");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   const addUser = async () => {

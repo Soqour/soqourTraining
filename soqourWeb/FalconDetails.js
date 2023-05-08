@@ -120,6 +120,19 @@ export default function FalconDetails({ route, navigation }) {
     );
     readTreatments();
     console.log("Tretment added  with ID: ", docRef.id);
+    addTreat();
+  };
+
+  const addTreat = async () => {
+    setTrainingModalVisible(false);
+    const docRef = await addDoc(collection(db, "treatments"), {
+      treatment: treat,
+      date: treatDate,
+      price: treatPrice,
+      id: falconId,
+    });
+    readTraining();
+    console.log("Train added  with ID: ", docRef.id);
   };
   return (
     <View style={styles.container}>

@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
 
   const [signedIn, setSignedIn] = useState(false);
-  const [emailError, setEmailError] = useState("haha");
+  const [emailError, setEmailError] = useState("");
   const [passError, setPassError] = useState("");
 
   const handleLogin = () => {
@@ -33,6 +33,7 @@ export default function Login({ navigation }) {
       setEmailError("الرجاء ادخال الايميل");
       return;
     } else if (password == "") {
+      setEmailError("");
       setPassError("الرجاء ادخال كلمة السر");
       return;
     }
@@ -43,8 +44,9 @@ export default function Login({ navigation }) {
         navigation.replace("AdminDashboard");
       })
       .catch((error) => {
+        setPassError("");
         console.log(error.message);
-        setError("البريد او كلمة السر غير صحيحة");
+        setEmailError("البريد او كلمة السر غير صحيحة");
         setSignedIn(false);
       });
   };
@@ -68,7 +70,9 @@ export default function Login({ navigation }) {
       <View style={styles.body}>
         <Text style={{ fontSize: 23, marginBottom: 20 }}>Login</Text>
 
-        {/* <Text style={{ color: "red" }}>{emailError}</Text> */}
+        <Text style={{ color: "red" }}>
+          {emailError ? emailError : passError ? passError : ""}
+        </Text>
 
         <View
           style={{
@@ -80,8 +84,8 @@ export default function Login({ navigation }) {
           <Text style={{ width: "30%", fontSize: 19 }}>Email: </Text>
 
           <TextInput
-            // onChangeText={setEmail}
-            // value={email}
+            onChangeText={setEmail}
+            value={email}
             style={styles.input}
           />
         </View>
@@ -94,15 +98,13 @@ export default function Login({ navigation }) {
         >
           <Text style={{ width: "30%", fontSize: 19 }}>Passowrd: </Text>
           <TextInput
-            // onChangeText={setPassword}
-            // value={password}
+            secureTextEntry
+            onChangeText={setPassword}
+            value={password}
             style={styles.input}
           />
         </View>
-        <Pressable
-          // onPress={handleLogin}
-          style={styles.button}
-        >
+        <Pressable onPress={handleLogin} style={styles.button}>
           <Text>Login</Text>
         </Pressable>
       </View>

@@ -18,6 +18,8 @@ export default function AdminDashboard({ route, navigation }) {
   const [user, setUser] = useState({});
   useEffect(() => {
     readFalcons();
+    readTreatments();
+    readIncome();
   }, []);
   const readUser = async () => {
     const docRef = doc(db, "users", qId);
@@ -40,10 +42,52 @@ export default function AdminDashboard({ route, navigation }) {
 
       setFalcons(querySnapshot.docs.map((doc) => doc.data()));
     });
+    // console.log("falconsssss", falcons);
+
+    return () => unsubscribe();
+  };
+
+  const [treatments, setTreatments] = useState([]);
+
+  const readTreatments = async () => {
+    const collectionRef = collection(db, "treatments");
+    const q = query(collectionRef);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      console.log("snapshot");
+
+      setTreatments(querySnapshot.docs.map((doc) => doc.data()));
+    });
+    console.log("treatmentsssss", treatments);
     console.log("falconsssss", falcons);
 
     return () => unsubscribe();
   };
+
+  const [income, setIncome] = useState([]);
+
+  const readIncome = async () => {
+    let temp = [];
+    const collectionRef = collection(db, "income");
+    const q = query(collectionRef);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      console.log("snapshot");
+
+      setIncome(querySnapshot.docs.map((doc) => doc.data()));
+    });
+    console.log("incomeee", income);
+    // let total = income ? income.reduce((acc, cur) => acc + cur.amount) : null;
+    // console.log("total", total);
+    total();
+
+    return () => unsubscribe();
+  };
+
+  const total = () => {
+    let b = [{ amount: 20 }, { amount: 20 }, { amount: 20 }];
+    let total = income.reduce((acc, cur, a) => acc + cur.amount, 0);
+    console.log("totall", total);
+  };
+
   const tableHead = [
     "المجموع",
     "المتبقي",
@@ -52,24 +96,7 @@ export default function AdminDashboard({ route, navigation }) {
     "رقم شريحة الطير",
     "رقم الطير",
   ];
-  const data = [
-    {
-      total: 250,
-      unpaid: 50,
-      paid: 200,
-      duration: 28,
-      number: 234561234,
-      id: 600123,
-    },
-    {
-      total: 300,
-      unpaid: 100,
-      paid: 200,
-      duration: 20,
-      number: 2654261234,
-      id: 600124,
-    },
-  ];
+
   return (
     <View style={styles.container}>
       {/* -------Header---------- */}
@@ -163,7 +190,7 @@ export default function AdminDashboard({ route, navigation }) {
               <Text
                 style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
               >
-                25
+                {treatments.length}
               </Text>
             </View>
             <View
@@ -182,7 +209,7 @@ export default function AdminDashboard({ route, navigation }) {
               <Text
                 style={{ fontSize: 22, marginLeft: 20, fontWeight: "bold" }}
               >
-                2500
+                {income.reduce((acc, cur, a) => acc + cur.amount, 0)}
               </Text>
             </View>
           </View>
