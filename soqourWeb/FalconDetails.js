@@ -21,9 +21,9 @@ import {
 import { DataTable } from "react-native-paper";
 import { db } from "./firebase";
 export default function FalconDetails({ route, navigation }) {
-  // const { qId, falconId } = route.params;
-  const qId = "29812345678";
-  const falconId = "600123";
+  const { falconId, qId } = route.params;
+  // const qId = "29812345678";
+  // const falconId = "600123";
   console.log(qId, "and ", falconId);
 
   const [user, setUser] = useState({});

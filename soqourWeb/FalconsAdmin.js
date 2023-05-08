@@ -45,6 +45,7 @@ export default function FalconsAdmin({ route, navigation }) {
 
   useEffect(() => {
     readFalcons();
+    // console.log(falcons);
   }, []);
 
   const readFalcons = async () => {
@@ -114,6 +115,7 @@ export default function FalconsAdmin({ route, navigation }) {
       totalPrice: 0,
       paid: 0,
       unpaid: 0,
+      ownerQID: qId,
     })
       .then(() => {
         console.log("Saqer added");
@@ -261,8 +263,12 @@ export default function FalconsAdmin({ route, navigation }) {
               {falcons &&
                 falcons.map((x) => (
                   <Pressable
+                    key={x.id}
                     onPress={() => {
-                      navigation.navigate("FalconDetails");
+                      navigation.navigate("FalconDetails", {
+                        falconId: x.id,
+                        qId: x.qId,
+                      });
                     }}
                   >
                     <DataTable.Row key={x.id} style={{ borderWidth: 1 }}>
@@ -289,7 +295,8 @@ export default function FalconsAdmin({ route, navigation }) {
                         {x.duration}
                       </DataTable.Cell>
                       <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                        {x.simId}
+                        {/* {x.simId} */}
+                        {x.qId}
                       </DataTable.Cell>
                       <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
                         {x.id}
