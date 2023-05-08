@@ -285,7 +285,7 @@ export default function AdminDashboard({ route, navigation }) {
                   <DataTable.Cell
                     textStyle={{ fontSize: 16, paddingLeft: "35%" }}
                   >
-                    {x.number}
+                    {x.simId}
                   </DataTable.Cell>
                   <DataTable.Cell
                     textStyle={{ fontSize: 16, paddingLeft: "35%" }}

@@ -295,8 +295,7 @@ export default function FalconsAdmin({ route, navigation }) {
                         {x.duration}
                       </DataTable.Cell>
                       <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
-                        {/* {x.simId} */}
-                        {x.qId}
+                        {x.simId}
                       </DataTable.Cell>
                       <DataTable.Cell numeric textStyle={{ fontSize: 16 }}>
                         {x.id}
